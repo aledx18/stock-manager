@@ -30,7 +30,6 @@ import { encodedRedirect } from '@/app/(auth-pages)/message'
 //     return encodedRedirect('error', '/sign-in', error.message)
 //   }
 
-//   return redirect('/check')
 // }
 
 export async function signInWithOtp(

@@ -3,7 +3,6 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 export const updateSession = async (request: NextRequest) => {
   try {
-    // Create an unmodified response
     let response = NextResponse.next({
       request: {
         headers: request.headers
@@ -33,24 +32,29 @@ export const updateSession = async (request: NextRequest) => {
       }
     )
 
-    // This will refresh session if expired - required for Server Components
+    const {
+      data: { user }
+    } = await supabase.auth.getUser()
 
-    const user = await supabase.auth.getUser()
+    if (
+      user &&
+      (request.nextUrl.pathname === '/sign-in' ||
+        request.nextUrl.pathname === '/sign-up')
+    ) {
+      return NextResponse.redirect(new URL('/protected', request.url))
+    }
 
-    // protected routes
-    if (request.nextUrl.pathname.startsWith('/protected') && user.error) {
+    if (!user && request.nextUrl.pathname.startsWith('/protected')) {
       return NextResponse.redirect(new URL('/sign-in', request.url))
     }
 
-    if (request.nextUrl.pathname === '/' && !user.error) {
+    if (user && request.nextUrl.pathname === '/') {
       return NextResponse.redirect(new URL('/protected', request.url))
     }
 
     return response
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
-    // If you are here, a Supabase client could not be created!
-    // This is likely because you have not set up environment variables.
     return NextResponse.next({
       request: {
         headers: request.headers
