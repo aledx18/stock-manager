@@ -1,46 +1,20 @@
 'use client'
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form'
-import { z } from 'zod'
-import { Button } from '@/components/ui/button'
-import { FormError } from '@/components/authForm/form-error'
+import { useFormStatus } from 'react-dom'
+
+import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { LoginSchema } from '@/lib/schema'
-import { signInAction } from '../actions'
-import { useForm } from 'react-hook-form'
-import { useSearchParams } from 'next/navigation'
-import { useState, useTransition } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@/components/ui/button'
+import { useActionState } from 'react'
 import CardWrapper from '@/components/authForm/card-wrapper'
+import { FormError } from '@/components/authForm/form-error'
+import { FormSuccess } from '@/components/authForm/form-success'
+import { signInWithOtp } from '@/app/auth/actions/actions'
 
 export default function Page() {
-  const [isPending, startTransition] = useTransition()
-  const [error, setError] = useState<string | undefined>('')
+  const [state, action] = useActionState(signInWithOtp, undefined)
+  const { pending } = useFormStatus()
 
-  const searchParams = useSearchParams()
-  const urlError = searchParams.get('error') || ''
-
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      email: '',
-      password: ''
-    }
-  })
-
-  function onSubmit(values: z.infer<typeof LoginSchema>) {
-    setError('')
-    startTransition(() => {
-      signInAction(values)
-    })
-  }
   return (
     <div className='flex h-screen justify-center items-center'>
       <CardWrapper
@@ -48,58 +22,39 @@ export default function Page() {
         backButtonLabel="Don't have an account?"
         backButtonHref='/sign-up'
         showSocial>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-            <div className='space-y-4'>
-              <FormField
-                control={form.control}
+        <form action={action} className='space-y-4'>
+          <div className='space-y-4'>
+            <div className='grid gap-2'>
+              <Label
+                className='data-[error=true]:text-destructive'
+                htmlFor='email'>
+                Email
+              </Label>
+              <Input
+                id='email'
                 name='email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder='john.@email.com'
-                        type='email'
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                placeholder='m@example.com'
+                type='email'
+                disabled={pending}
               />
-              <FormField
-                control={form.control}
-                name='password'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder='******'
-                        type='password'
-                      />
-                    </FormControl>
-                    <FormMessage />
-                    <Button
-                      size='sm'
-                      variant='link'
-                      asChild
-                      className='px-0 font-normal'
-                    />
-                  </FormItem>
-                )}
-              />
-              <FormError message={urlError || error} />
+              {state?.errors?.email && (
+                <p className='text-destructive text-sm'>{state.errors.email}</p>
+              )}
             </div>
-            <Button type='submit' className='w-full' disabled={isPending}>
-              Login
-            </Button>
-          </form>
-        </Form>
+            {state?.errorMessage && <FormError message={state.errorMessage} />}
+            {state?.successMessage && (
+              <FormSuccess message={state.successMessage} />
+            )}
+          </div>
+          <Button
+            aria-disabled={pending}
+            variant={'secondary'}
+            type='submit'
+            className='w-full'
+            disabled={pending}>
+            {pending ? 'Submitting...' : 'Sign in'}
+          </Button>
+        </form>
       </CardWrapper>
     </div>
   )
