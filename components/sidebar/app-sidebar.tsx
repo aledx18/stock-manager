@@ -3,10 +3,10 @@
 import { ComponentProps } from 'react'
 import { Frame, Map, PieChart, SquareTerminal } from 'lucide-react'
 
-import { NavMain } from '@/components/sidabar/nav-main'
-import { NavProjects } from '@/components/sidabar/nav-projects'
-import { NavUser } from '@/components/sidabar/nav-user'
-import { TitlePrimary } from '@/components/sidabar/titlePrimary'
+import { NavMain } from '@/components/sidebar/nav-main'
+import { NavProjects } from '@/components/sidebar/nav-projects'
+import { NavUser } from '@/components/sidebar/nav-user'
+import { TitlePrimary } from '@/components/sidebar/titlePrimary'
 import {
   Sidebar,
   SidebarContent,
@@ -14,14 +14,12 @@ import {
   SidebarHeader,
   SidebarRail
 } from '@/components/ui/sidebar'
+import { Database } from '@/db_types'
+
+type ProfileData = Database['public']['Tables']['profiles']['Row'] | null
 
 // This is sample data.
 const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: 'https://avatars.githubusercontent.com/u/38964375?v=4'
-  },
   navMain: [
     {
       title: 'Platforms',
@@ -71,7 +69,10 @@ const data = {
   ]
 }
 
-export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  profileData,
+  ...props
+}: { profileData: ProfileData } & ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
@@ -82,7 +83,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser profileData={profileData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
