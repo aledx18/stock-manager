@@ -2,10 +2,10 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
+import Link from 'next/link'
 
 import { usePathname } from 'next/navigation'
 import { Fragment } from 'react'
@@ -16,22 +16,18 @@ export default function BreadcrumbsLink() {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {/* <BreadcrumbItem className='hidden md:block'>
-          <BreadcrumbLink href='/'>Home</BreadcrumbLink>
-        </BreadcrumbItem> */}
-        {/* {segments.length > 0 && <BreadcrumbSeparator />} */}
         {segments?.map((item, index) => (
           <Fragment key={item}>
             <BreadcrumbItem>
-              <BreadcrumbLink
+              <Link
                 href={`/${segments.slice(0, index + 1).join('/')}`}
                 className={
                   pathname === `/${segments.slice(0, index + 1).join('/')}`
                     ? 'text-secondary-foreground'
-                    : ''
+                    : 'hover:text-foreground transition-colors'
                 }>
-                {item}
-              </BreadcrumbLink>
+                {item.charAt(0).toUpperCase() + item.slice(1)}
+              </Link>
             </BreadcrumbItem>
             {index < segments.length - 1 && <BreadcrumbSeparator />}
           </Fragment>
