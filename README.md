@@ -1,24 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stock-Manager
 
-## Getting Started
+A brief description of what this project does and who it's for
 
-First, run the development server:
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env.local file.
+
+`NEXT_PUBLIC_SUPABASE_URL`= https://....
+
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`= ...
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://link-to-project
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  cd my-project
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies
+
+```bash
+  npm install
+```
+
+generate types for <Database> with supabase CLI run :
+
+```bash
+  supabase gen types typescript --project-id your-project-id > db_types.ts
+```
+
+## 🔗 Links
+
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://porfolio-dev-two.vercel.app/)
+
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/alejandrodíaz-dev)
+
+## Tech Stack
+
+**Client:** React, Nextjs, TailwindCSS, Shadcn/ui, zod, TypeScript
+
+**Server:** Nextjs
+
+**Database** Supabase
 
 ## Learn More
 
@@ -28,9 +58,3 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
