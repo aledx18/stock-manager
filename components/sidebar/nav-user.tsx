@@ -9,15 +9,13 @@ import {
   Sparkles
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
+import { Database } from '@/db_types'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
-
-import { Database } from '@/db_types'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,16 +25,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { createClient } from '@/supabase/client'
-import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
 type ProfileData = Database['public']['Tables']['profiles']['Row'] | null
 
 async function signOut() {
-  const supabase = createClient()
-  await supabase.auth.signOut()
-  console.log('signOut')
-  redirect('/')
+  const res = await fetch('/auth/signout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  if (res.ok) window.location.href = '/sign-in'
 }
 
 export function NavUser({ profileData }: { profileData: ProfileData }) {
@@ -101,9 +99,11 @@ export function NavUser({ profileData }: { profileData: ProfileData }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem asChild>
+                <Link href={'/protected/account'}>
+                  <BadgeCheck />
+                  Account
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
