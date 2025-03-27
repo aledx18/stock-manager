@@ -16,29 +16,53 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem
 } from '@/components/ui/sidebar'
-import { ChevronRight, type LucideIcon } from 'lucide-react'
+import { ChevronRight, Store } from 'lucide-react'
 import Link from 'next/link'
 
-export function NavMain({
-  items
-}: {
-  items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
-}) {
+type CompanyName = {
+  name: string
+} | null
+
+export function NavMain({ companyName }: { companyName: CompanyName }) {
   const pathname = usePathname()
+
+  const data = {
+    navMain: [
+      {
+        title: `${companyName?.name}`,
+        url: '#',
+        icon: Store,
+        isActive: true,
+        items: [
+          {
+            title: 'All',
+            url: '/protected'
+          },
+          {
+            title: 'Products',
+            url: '#'
+          },
+          {
+            title: 'Reports',
+            url: '#'
+          },
+          {
+            title: 'Sales',
+            url: '#'
+          },
+          {
+            title: 'Analitycs',
+            url: '#'
+          }
+        ]
+      }
+    ]
+  }
 
   return (
     <SidebarGroup>
       <SidebarMenu>
-        {items.map((item) => (
+        {data.navMain.map((item) => (
           <Collapsible
             key={item.title}
             asChild

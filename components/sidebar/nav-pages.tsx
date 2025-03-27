@@ -1,7 +1,5 @@
 'use client'
 
-import { type LucideIcon } from 'lucide-react'
-
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -9,21 +7,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from '@/components/ui/sidebar'
+import { pageLinks } from './pageLinks'
 
-export function NavProjects({
-  projects
-}: {
-  projects: {
-    name: string
-    url: string
-    icon: LucideIcon
-  }[]
-}) {
+export function NavPagesLinks() {
   return (
     <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Pages</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
+        {pageLinks.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <a href={item.url}>
