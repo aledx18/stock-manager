@@ -10,24 +10,77 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      companies: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          owner_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          owner_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          owner_id?: string
+        }
+        Relationships: []
+      }
+      company_users: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          role?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'company_users_company_id_fkey'
+            columns: ['company_id']
+            isOneToOne: false
+            referencedRelation: 'companies'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       profiles: {
         Row: {
           avatar: string | null
           email: string | null
           first_name: string | null
           id: string
+          role: string
         }
         Insert: {
           avatar?: string | null
           email?: string | null
           first_name?: string | null
           id: string
+          role?: string
         }
         Update: {
           avatar?: string | null
           email?: string | null
           first_name?: string | null
           id?: string
+          role?: string
         }
         Relationships: []
       }
@@ -36,7 +89,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      invite_user_to_company: {
+        Args: {
+          user_email: string
+          target_company_id: string
+          user_role: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
