@@ -85,15 +85,13 @@ export async function signUpAction(values: z.infer<typeof SignupFormSchema>) {
   const { email, name, password } = validatedFields.data
 
   const supabase = await createClient()
-  //   const origin = (await headers()).get('origin')
-
-  console.log(`${getUrl}/auth/callback`)
+  const origin = (await headers()).get('origin')
 
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${getUrl}/auth/callback`,
+      emailRedirectTo: `${origin}/auth/callback`,
       data: {
         first_name: `${name}`
       }
@@ -119,16 +117,16 @@ export const signOutAction = async () => {
 }
 
 export async function signInWithGoogle() {
-  const origin = (await headers()).get('origin')
-  const authCallbackUrl = `${process.env.SITE_URL}/auth/callback`
+  //   const origin = (await headers()).get('origin')
+
   // test
-  console.log('auth_callback_url', authCallbackUrl)
+  console.log(`${getUrl('/auth/callback')}`)
 
   const supabase = await createClient()
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${origin}/auth/callback`,
+      redirectTo: `${getUrl('/auth/callback')}`,
       queryParams: {
         access_type: 'offline',
         prompt: 'consent'
