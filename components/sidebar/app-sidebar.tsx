@@ -17,62 +17,69 @@ import {
 import { Database } from '@/db_types'
 
 type ProfileData = Database['public']['Tables']['profiles']['Row'] | null
-
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: 'Platforms',
-      url: '#',
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: 'All',
-          url: '/platforms'
-        },
-        {
-          title: 'Nintendo',
-          url: '/platforms/nintendo'
-        },
-        {
-          title: 'Playstation',
-          url: '/platforms/playstation'
-        },
-        {
-          title: 'Sega',
-          url: '/platforms/sega'
-        },
-        {
-          title: 'Atari',
-          url: '/platforms/atari'
-        }
-      ]
-    }
-  ],
-  projects: [
-    {
-      name: 'D',
-      url: '#',
-      icon: Frame
-    },
-    {
-      name: 'S',
-      url: '#',
-      icon: PieChart
-    },
-    {
-      name: 'T',
-      url: '#',
-      icon: Map
-    }
-  ]
-}
+type CompanyName = {
+  name: string
+} | null
 
 export function AppSidebar({
   profileData,
+  companyName,
   ...props
-}: { profileData: ProfileData } & ComponentProps<typeof Sidebar>) {
+}: { profileData: ProfileData; companyName: CompanyName } & ComponentProps<
+  typeof Sidebar
+>) {
+  // This is sample data.
+
+  const data = {
+    navMain: [
+      {
+        title: `${companyName?.name}`,
+        url: '#',
+        icon: SquareTerminal,
+        isActive: true,
+        items: [
+          {
+            title: 'All',
+            url: '/platforms'
+          },
+          {
+            title: 'Nintendo',
+            url: '/platforms/nintendo'
+          },
+          {
+            title: 'Playstation',
+            url: '/platforms/playstation'
+          },
+          {
+            title: 'Sega',
+            url: '/platforms/sega'
+          },
+          {
+            title: 'Atari',
+            url: '/platforms/atari'
+          }
+        ]
+      }
+    ],
+    projects: [
+      {
+        name: 'D',
+        url: '#',
+        icon: Frame
+      },
+      {
+        name: 'S',
+        url: '#',
+        icon: PieChart
+      },
+      {
+        name: 'T',
+        url: '#',
+        icon: Map
+      }
+    ]
+  }
+
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
