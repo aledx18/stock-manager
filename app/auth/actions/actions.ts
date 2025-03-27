@@ -139,6 +139,8 @@ export async function signInWithGoogle() {
     encodedRedirect('error', '/sign-in', error.message)
   }
 
+  console.log(data.url)
+
   if (data.url) {
     redirect(data.url)
   }
