@@ -26,29 +26,28 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
-  const origin = requestUrl.origin
-  const redirectTo =
-    requestUrl.searchParams.get('redirect_to')?.toString() || '/protected'
+  const next = requestUrl.searchParams.get('next') || '/protected'
+
+  // Solución robusta para obtener la URL base
+  const host =
+    request.headers.get('x-forwarded-host') || request.headers.get('host')
+  const protocol = host?.includes('localhost') ? 'http' : 'https'
+  const baseUrl = `${protocol}://${host}`
+
+  console.log('baseUrl', baseUrl)
+  console.log('next', next)
 
   if (code) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (error) {
-      console.error('Error exchanging code for session:', error)
-      return NextResponse.redirect(`${origin}/auth-error`)
+      console.error('Error exchanging code:', error)
+      return NextResponse.redirect(`${baseUrl}/auth-error`)
     }
 
-    const forwardedHost = request.headers.get('x-forwarded-host')
-    const isLocalEnv = process.env.NODE_ENV === 'development'
-
-    if (isLocalEnv) {
-      return NextResponse.redirect(`${origin}${redirectTo}`)
-    } else if (forwardedHost) {
-      return NextResponse.redirect(`https://${forwardedHost}${redirectTo}`)
-    }
+    return NextResponse.redirect(`${baseUrl}${next}`)
   }
 
-  // Redirección por defecto (tanto para casos con/sin código)
-  return NextResponse.redirect(`${origin}${redirectTo}`)
+  return NextResponse.redirect(`${baseUrl}/auth-error`)
 }
