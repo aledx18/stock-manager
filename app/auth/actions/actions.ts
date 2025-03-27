@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/supabase/server'
 import { FormState, SignInOtpSchema, SignupFormSchema } from '@/lib/schema'
 import { encodedRedirect } from '@/app/(auth-pages)/message'
+import getUrl from '@/lib/getUrl'
 
 // export async function exampleSignInWithOtp(values: z.infer<typeof SignInOtpSchema>) {
 //   const origin = (await headers()).get('origin')
@@ -84,13 +85,15 @@ export async function signUpAction(values: z.infer<typeof SignupFormSchema>) {
   const { email, name, password } = validatedFields.data
 
   const supabase = await createClient()
-  const origin = (await headers()).get('origin')
+  //   const origin = (await headers()).get('origin')
+
+  console.log(`${getUrl}/auth/callback`)
 
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${origin}/auth/callback`,
+      emailRedirectTo: `${getUrl}/auth/callback`,
       data: {
         first_name: `${name}`
       }
@@ -117,6 +120,9 @@ export const signOutAction = async () => {
 
 export async function signInWithGoogle() {
   const origin = (await headers()).get('origin')
+  const authCallbackUrl = `${process.env.SITE_URL}/auth/callback`
+  // test
+  console.log('auth_callback_url', authCallbackUrl)
 
   const supabase = await createClient()
   const { data, error } = await supabase.auth.signInWithOAuth({
