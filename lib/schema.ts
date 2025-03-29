@@ -29,18 +29,6 @@ export const SignInPasswordSchema = z.object({
     .min(8, { message: 'Password must be at least 8 characters long.' })
 })
 
-export type FormState =
-  | {
-      errors?: {
-        name?: string[]
-        email?: string[]
-        password?: string[]
-      }
-      successMessage?: string // Mensaje de éxito
-      errorMessage?: string // Mensaje de error general
-    }
-  | undefined
-
 export type SessionPayload = {
   userId: string | number
   expiresAt: Date
