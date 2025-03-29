@@ -15,11 +15,11 @@ import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { Suspense, useState, useTransition } from 'react'
 import { SignupFormSchema } from '@/lib/schema'
-import { signUpAction } from '@/app/auth/actions/actions'
 import { Input } from '@/components/ui/input'
 import { FormSuccess } from '@/components/authForm/form-success'
 import { FormError } from '@/components/authForm/form-error'
 import { Button } from '@/components/ui/button'
+import { signUpAction } from '@/app/auth/actions/signUpAction'
 
 function MessageParams() {
   const searchParams = useSearchParams()

@@ -1,18 +1,36 @@
+/* eslint-disable no-unused-vars */
 'use client'
 
+import CardWrapper from '@/components/authForm/card-wrapper'
 import { useFormStatus } from 'react-dom'
-
+import { useActionState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { useActionState } from 'react'
-import CardWrapper from '@/components/authForm/card-wrapper'
-import { FormError } from '@/components/authForm/form-error'
 import { FormSuccess } from '@/components/authForm/form-success'
-import { signInWithOtp } from '@/app/auth/actions/actions'
+import { FormError } from '@/components/authForm/form-error'
+import { Button } from '@/components/ui/button'
+import { signInWithOtp } from '@/app/auth/actions/signInAction'
+
+export interface signInWithOtpFormData {
+  email: string
+}
+
+export interface ActionResponse {
+  success: boolean
+  message: string
+  inputs?: signInWithOtpFormData
+  errors?: {
+    [K in keyof signInWithOtpFormData]?: string[]
+  }
+}
+
+const initialState: ActionResponse = {
+  success: false,
+  message: ''
+}
 
 export default function Page() {
-  const [state, action] = useActionState(signInWithOtp, undefined)
+  const [state, action] = useActionState(signInWithOtp, initialState)
   const { pending } = useFormStatus()
 
   return (
@@ -35,16 +53,22 @@ export default function Page() {
                 name='email'
                 placeholder='m@example.com'
                 type='email'
+                required
+                defaultValue={state?.inputs?.email}
                 disabled={pending}
               />
               {state?.errors?.email && (
-                <p className='text-destructive text-sm'>{state.errors.email}</p>
+                <p className='text-destructive text-sm'>
+                  {state.errors.email[0]}
+                </p>
               )}
             </div>
-            {state?.errorMessage && <FormError message={state.errorMessage} />}
-            {state?.successMessage && (
-              <FormSuccess message={state.successMessage} />
-            )}
+            {state?.message &&
+              (state.success ? (
+                <FormSuccess message={state.message} />
+              ) : (
+                <FormError message={state.message} />
+              ))}
           </div>
           <Button
             aria-disabled={pending}
