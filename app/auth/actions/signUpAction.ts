@@ -8,10 +8,8 @@ import { SignupFormSchema } from '@/lib/schema'
 import { encodedRedirect } from '@/app/(auth-pages)/message'
 
 export async function signUpAction(values: z.infer<typeof SignupFormSchema>) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   const validatedFields = SignupFormSchema.safeParse(values)
-
+  // await new Promise((resolve) => setTimeout(resolve, 1000))
   if (!validatedFields.success) {
     return encodedRedirect('error', '/sign-up', 'Invalid fields')
   }

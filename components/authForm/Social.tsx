@@ -1,6 +1,6 @@
 'use client'
 
-import { signInWithGoogle } from '@/app/auth/actions/actions'
+import { signInWithGoogle } from '@/app/auth/actions/signInAction'
 import { Button } from '@/components/ui/button'
 
 export default function Social() {
