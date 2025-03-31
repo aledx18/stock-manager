@@ -2,15 +2,14 @@ import { CSSProperties, ReactNode } from 'react'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/sidebar/app-sidebar'
 import { SiteHeader } from '@/components/nav/SiteHeader'
-import { getCompanyName, getProfileData } from './getUser'
+import { getInitialData } from './getInitialData'
 
 export default async function ProtectedLayout({
   children
 }: Readonly<{
   children: ReactNode
 }>) {
-  const profileData = await getProfileData()
-  const companyName = await getCompanyName()
+  const { profileData, company } = await getInitialData()
 
   return (
     <SidebarProvider
@@ -21,7 +20,7 @@ export default async function ProtectedLayout({
       }>
       <AppSidebar
         variant='inset'
-        companyName={companyName}
+        companyName={company?.name || 'name not found'}
         profileData={profileData}
       />
       <SidebarInset>
