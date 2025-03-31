@@ -17,10 +17,10 @@ import { Loader2 } from 'lucide-react'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { updateProfile } from '../getUser'
 import { FormError } from '@/components/authForm/form-error'
 import { FormSuccess } from '@/components/authForm/form-success'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { updateProfile } from './updatProfile'
 
 type ProfileData = Database['public']['Tables']['profiles']['Row'] | null
 
