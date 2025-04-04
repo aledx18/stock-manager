@@ -1,5 +1,7 @@
 // import { getCompanyUsers } from '../getUser'
+import { Heading } from '@/components/ui/heading'
 import { getInitialData } from '../getInitialData'
+import AddUser from './components/addUser'
 import UserClient from './components/UserClient'
 
 export interface Profile {
@@ -19,7 +21,7 @@ export interface companyUsersColumnsType {
 }
 
 export default async function UserPage() {
-  const { companyUsers } = await getInitialData()
+  const { companyUsers, company } = await getInitialData()
 
   const formattedUsers: companyUsersColumnsType[] = companyUsers
     ? companyUsers.map((item) => ({
@@ -36,6 +38,13 @@ export default async function UserPage() {
   return (
     <div className='flex-col'>
       <div className='flex-1 space-y-4 p-8 pt-6'>
+        <div className='flex items-center justify-between'>
+          <Heading
+            title={`Users (${formattedUsers.length})`}
+            description='Manage Users'
+          />
+          <AddUser companyId={company?.id} />
+        </div>
         <UserClient data={formattedUsers} />
       </div>
     </div>
