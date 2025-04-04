@@ -1,103 +1,62 @@
 'use client'
 
-import clsx from 'clsx'
+import { workspaceLinks } from './pageLinks'
 import { usePathname } from 'next/navigation'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger
-} from '@/components/ui/collapsible'
-import {
-  SidebarGroup,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem
-} from '@/components/ui/sidebar'
-import { ChevronRight, Store } from 'lucide-react'
 import Link from 'next/link'
 
-type CompanyName = {
-  name: string
-} | null
+import clsx from 'clsx'
 
-export function NavMain({ companyName }: { companyName: CompanyName }) {
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem
+} from '@/components/ui/sidebar'
+
+export function NavMain() {
   const pathname = usePathname()
 
-  const data = {
-    navMain: [
-      {
-        title: `${companyName?.name}`,
-        url: '#',
-        icon: Store,
-        isActive: true,
-        items: [
-          {
-            title: 'All',
-            url: '/protected'
-          },
-          {
-            title: 'Products',
-            url: '#'
-          },
-          {
-            title: 'Reports',
-            url: '#'
-          },
-          {
-            title: 'Sales',
-            url: '#'
-          },
-          {
-            title: 'Analitycs',
-            url: '#'
-          }
-        ]
-      }
-    ]
-  }
-
   return (
-    <SidebarGroup>
-      <SidebarMenu>
-        {data.navMain.map((item) => (
-          <Collapsible
-            key={item.title}
-            asChild
-            defaultOpen={item.isActive}
-            className='group/collapsible'>
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
+    <div className='flex justify-between flex-col flex-1 py-6'>
+      <SidebarGroup>
+        <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+        <SidebarMenu>
+          {workspaceLinks.navMain.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild tooltip={item.title}>
+                <Link
+                  href={item.url}
+                  className={clsx({
+                    'bg-sidebar-accent font-semibold': item.url === pathname
+                  })}>
                   {item.icon && <item.icon className='text-primary' />}
-                  <span className='font-semibold'>{item.title}</span>
-                  <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <Link
-                          href={subItem.url}
-                          className={clsx({
-                            'bg-sidebar-accent': subItem.url === pathname,
-                            'font-medium': true
-                          })}>
-                          <span>{subItem.title}</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
+                  <span className=''>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
-          </Collapsible>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>More</SidebarGroupLabel>
+        <SidebarMenu>
+          {workspaceLinks.moreLinks.map((item) => (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton asChild tooltip={item.name}>
+                <Link
+                  href={item.url}
+                  className={clsx({
+                    'bg-sidebar-accent font-semibold': item.url === pathname
+                  })}>
+                  <item.icon />
+                  <span>{item.name}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+    </div>
   )
 }
