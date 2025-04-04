@@ -1,16 +1,13 @@
 import { CSSProperties, ReactNode } from 'react'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/sidebar/app-sidebar'
 import { SiteHeader } from '@/components/nav/SiteHeader'
-import { getInitialData } from './getInitialData'
+import { AppSidebar } from '@/components/sidebar/app-sidebar'
 
-export default async function ProtectedLayout({
+export default function ProtectedLayout({
   children
 }: Readonly<{
   children: ReactNode
 }>) {
-  const { profileData, company } = await getInitialData()
-
   return (
     <SidebarProvider
       style={
@@ -18,11 +15,7 @@ export default async function ProtectedLayout({
           '--sidebar-width': 'calc(var(--spacing) * 62)'
         } as CSSProperties
       }>
-      <AppSidebar
-        variant='inset'
-        companyName={company?.name || 'name not found'}
-        profileData={profileData}
-      />
+      <AppSidebar />
       <SidebarInset>
         <SiteHeader />
         <div className='flex flex-1 flex-col'>{children}</div>
