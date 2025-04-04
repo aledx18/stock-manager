@@ -1,11 +1,10 @@
 'use server'
 
-import { createClient } from '@/supabase/server'
-
 import { z } from 'zod'
-import { formSchemaProfile } from './accountForm'
-import { redirect } from 'next/navigation'
 import { unstable_cache as cache, revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+import { formSchemaProfile } from './accountForm'
+import { createClient } from '@/supabase/server'
 
 export async function getProfileData() {
   const supabase = await createClient()
@@ -17,7 +16,8 @@ export async function getProfileData() {
 
   const profileCached = cache(
     async (userId: string) => {
-      console.log('getProfile data cached')
+      console.log('getProfile 📝 data cached')
+
       const profileData = await supabase
         .from('profiles')
         .select('*')
@@ -27,8 +27,8 @@ export async function getProfileData() {
 
       return profileData
     },
-    [`profile-data-${user.id}`],
-    { revalidate: 3600, tags: [`profile-data-${user.id}`] }
+    [`profile-data-${user}`],
+    { revalidate: 14400, tags: [`profile-data-${user.id}`] }
   )
 
   return await profileCached(user.id)
